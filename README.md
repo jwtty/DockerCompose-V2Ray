@@ -1,111 +1,92 @@
-# 使用docker-compose以ws+tls方式快速部署科学上网利器v2ray
+# Deploy V2Ray with Docker Compose
 
+Update from the original repo:
 
-## 更新日志
+1. Add additional notes for trouble shooting
+2. Update guidelines such as the latest usage of docker compose
 
-* 2020年3月3日：增加v2ray并使用ws+tls方式实现代理服务；
-* 2020年3月1日：增加nginx服务并启用certbot证书；
+## Steps
 
-## 使用步骤
+### 1. Setup VPS
 
-1. 获取域名及VPS
+> Using Azure as an example
 
-* 免费域名注册： <a href="https://www.freenom.com/zh/index.html?lang=zh" target="_blank">免费域名申请</a>；；
-* VPS推荐搬瓦工，支持支付宝付款： <a href="https://www.4spaces.org/best-details-to-buy-banwagonhost/" target="_blank">史上最详细搬瓦工VPS注册/购买图文教程(内附优惠券)</a>
-* 搬瓦工： <a href="https://www.4spaces.org/bwg/static/promotion.html" target="_blank">当前促销方案</a>
-* 通过此【<a href="https://www.vultr.com/?ref=7365575" target="_blank" rel="noopener noreferrer">链接</a>】注册Vultr VPS，即可获得$100，推荐上新的 <a href="https://www.aliyunhost.net/vultr-korea-datacenter-launch/" target="_blank">Vultr韩国机房</a> 。
-* [2021最新基于nginx搭建v2ray服务端配置vmess+tls+websocket详细教程（图文）](https://www.4spaces.org/install-v2ray-on-debian-2021/);
-* 极力推荐：<a href="https://www.4spaces.org/racknerd-start-tutorial-2021-618/" target="_blank" rel="noopener">racknerd(17.88刀/年，5T流量/月)快速搭建v2ray服务端配置vmess+tls+websocket详细教程（图文）</a>
+1. Create a Virtual Machine
+   1. Any kind of Size (schema) will work, but you can use exactly the same as mine
+      1. Size: Standard B2s (2 vcpus, 4 GiB memory)
+      2. Operating system: Linux (ubuntu 20.04)
+      3. Location: Japan East
+      4. Disk: Standard SSD
+   2. Make sure you disable the auto-shutdown scheduling
+2. Once the VM creation complete
+   1. Open necessary ports, in this case you need to open 80, 443
+   2. Create a DNS name: such as `your-dns-name`
+      1. You can use a dynamic IP address
+      2. You will be able to connect to your machine by using `your-dns-name.japaneast.cloudapp.azure.com` depending on the machine's location
 
-* <a href="https://www.4spaces.org/racknerd-start-tutorial/" target="_blank" rel="noopener">racknerd(12.79刀/年，3T流量/月)快速搭建v2ray服务端配置vmess+tls+websocket详细教程（图文）</a>
+### 2. Setup Environment
 
+> `ssh` into your machine
 
-2. 安装docker-ce并启动
+1. Install `docker`
+   1. Download auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
+   2. Add user to docker user group (so you don't need `sudo` to use `docker`): `gpasswd -a $USER docker`
+   3. Make docker auto start on boot: `sudo systemctl start docker` then `sudo systemctl enable docker`
+2. Install `docker compose` ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/))
+   1. `DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}`
+   2. `mkdir -p $DOCKER_CONFIG/cli-plugins`
+   3. `curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose`
+   4. `chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose`
 
-以下操作我都是以root用户(非必须)进行的。
+### 3. Clone Code and Config
 
-* 安装
+1. Download some CLI tools
+   1. `sudo apt update`
+   2. `sudo apt install git vim tmux`
+2. `git clone https://github.com/daviddwlee84/DockerCompose-V2Ray.git` and `cd DockerCompose-V2Ray`
+3. Modify settings
+   1. `init-letsencrypt.sh`
+      1. Modify `domains` and `email` to be your own
+      2. If you are using Azure, the `domains` is `your-dns-name.japaneast.cloudapp.azure.com`
+      3. Note that `domains` SHOULD BE AN ARRAY, that is you should keep the parenthesis there.
+   2. `docker-compose.yml`
+      1. No need to modify
+   3. `data/v2ray/config.json`
+      1. Change id to use your own `"id": "bae399d4-13a4-46a3-b144-4af2c0004c2e"` (or you can leave it as what it is)
+      2. You can generate new UUID using this online tool: [Online UUID Generator Tool](https://www.uuidgenerator.net/)
+   4. `data/nginx/conf.d/v2ray.conf` (but currently it will be override by `init-letsencrypt.sh`?! whatever)
+      1. Modify all `your_domain`
+      2. You can use vim `:%s/your_domain/your-dns-name.japaneast.cloudapp.azure.com/g`
+4. Setup Nginx and HTTPS encryption stuff
+    1. `chmod +x ./init-letsencrypt.sh`
+    2. `./init-letsencrypt.sh`
+5. Start server
+   1. `tmux`
+   2. `docker compose up`
 
-```
-$ curl -fsSL https://get.docker.com -o get-docker.sh
-$ sh get-docker.sh
-```
+> You should be able to close your terminal now
 
-**注：** 这一步如果是CENTOS 8，可能会出现 `requires containerd.io >= 1.2.2-3错误` -> [解决办法](https://www.4spaces.org/docker-ce-install-containerd-io-error/)。
+### 4. Config Your Client
 
-* 添加用户到用户组(需退出当前会话重启登录才生效)
+1. Address: `your-dns-name.japaneast.cloudapp.azure.com`
+2. Port: `443`
+3. UUID: `bae399d4-13a4-46a3-b144-4af2c0004c2e`
+4. Alert ID: 64
+5. Method: auto
+6. TLS
+   1. enable
+   2. allow insecure
+7. Transport: `websocket`
+   1. Path: `/v2ray`
 
-```
-gpasswd -a $USER docker
-```
+## Trouble Shooting
 
-* 启动
+You can see `logs/` folder
 
-```
-systemctl start docker
-```
+Use `sudo tail -f ./path/to/log.log` to see the error message then debug
 
-* 设置docker开机自启动
-
-```
-systemctl enable docker
-```
-
-3. 安装`docker-compose`
-
-```
-$  curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-$ chmod +x /usr/local/bin/docker-compose
-
-$ ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-```
-
-4. 安装git并clone代码
-
-```
-yum -y install git
-
-
-git clone https://github.com/aitlp/docker-v2ray.git
-```
-
-或者你可以下载后在上传到你的VPS。
-
-5. 修改v2ray配置
-
-进入`docker-v2ray`目录开始修改配置。
-
-**1) `init-letsencrypt.sh`**
-
-将里面的`domains`和`email`修改为自己的域名和邮箱。
-
-**2) `docker-compose.yml`**
-
-可以不用动。
-
-**3) `data/v2ray/config.json`**
-
-修改ID，`"id": "bae399d4-13a4-46a3-b144-4af2c0004c2e"`，也可以不修改。
-
-**4) `data/nginx/conf.d/v2ray.conf`**
-
-修改所有`your_domain`为自己的域名，其他地方，如果上面可以修改的地方你没修改，那么除了域名之外的也不用修改了。
-
-6. 一键部署v2ray
-
-```
-chmod +x ./init-letsencrypt.sh
-
-bash init-letsencrypt.sh
-```
-
-7. 进行v2ray客户端配置
-
-现在你可以开始使用了。
-
-细节参考： <a href="https://www.4spaces.org/docker-compose-install-v2ray-ws-tls/" target="_blank" rel="noopener noreferrer">在docker-compose环境下以ws+tls方式搭建v2ray(So easy)</a>
-
-相关配置参考： <a href="https://www.4spaces.org/v2ray-nginx-tls-websocket/" target="_blank" rel="noopener noreferrer">centos7基于nginx搭建v2ray服务端配置vmess+tls+websocket完全手册</a>
-
-交流Telegram群组：[三好学生](https://t.me/goodgoodgoodstudent);
+1. If you forgot to open `80,443` ports, you will fail at certbot step. Remove `data/certbot` folder and try again.
+2. If your Nginx server successfully running, you can connect to `https://your-dns-name.japaneast.cloudapp.azure.com` using a browser and see "Congratulation!" which basically is this HTML ([`data/nginx/html/v2ray/index.html`](data/nginx/html/v2ray/index.html))
+3. You can connect to `https://your-dns-name.japaneast.cloudapp.azure.com/v2ray`
+   1. If you get a 502 error, that means your V2Ray server is not running correctly.
+   2. If you get the text "bad request", that means it successfully running.

@@ -12,10 +12,11 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     ports:
+      # You will need to expose these port to the public
       - "80:80"
       - "443:443"
     links:
-      - v2ray:v2ray #连接v2ray容器，映射主机名，此处非常重要，如果没有这个映射nginx就无法连接v2ray的websocket服务
+      - v2ray:v2ray # This is very important step, that the nginx docker need this to coonect with v2ray docker
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   certbot:
@@ -26,7 +27,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-  
+
   v2ray:
     image: v2ray/official:latest
     container_name: v2ray
@@ -38,4 +39,4 @@ services:
       - ./data/v2ray:/etc/v2ray
       - ./logs/v2ray:/var/log/v2ray
     expose:
-      - "30909" #开放端口给容器，不对外开放
+      - "30909" # This is for the nginx docker, you don't need to expose it to the public
