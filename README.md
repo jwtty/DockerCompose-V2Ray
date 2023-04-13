@@ -79,6 +79,31 @@ Update from the original repo:
 7. Transport: `websocket`
    1. Path: `/v2ray`
 
+#### 4-1. Clash
+
+* Clash for Windows: [Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)
+
+```yaml
+# ...
+
+proxies:
+  - name: "Your Customized Name"
+    type: vmess
+    server: your-dns-name.japaneast.cloudapp.azure.com
+    port: 443
+    uuid: bae399d4-13a4-46a3-b144-4af2c0004c2e
+    alterId: 64
+    cipher: auto
+    udp: false
+    tls: true
+    skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /v2ray
+
+# ...
+```
+
 ## Trouble Shooting
 
 You can see `logs/` folder
