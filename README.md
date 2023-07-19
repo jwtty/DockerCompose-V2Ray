@@ -30,9 +30,9 @@ Update from the original repo:
 
 1. Install `docker`
    1. Download auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
-   2. Add user to docker user group (so you don't need `sudo` to use `docker`): `gpasswd -a $USER docker`
+   2. Add user to docker user group (so you don't need `sudo` to use `docker`): `sudo gpasswd -a $USER docker`
    3. Make docker auto start on boot: `sudo systemctl start docker` then `sudo systemctl enable docker`
-2. Install `docker compose` ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/))
+2. ~~Install `docker compose`~~ ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/)) (Currently docker compose is a built-in)
    1. `DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}`
    2. `mkdir -p $DOCKER_CONFIG/cli-plugins`
    3. `curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose`
@@ -47,7 +47,7 @@ Update from the original repo:
 3. Modify settings
    1. `init-letsencrypt.sh`
       1. Modify `domains` and `email` to be your own
-      2. If you are using Azure, the `domains` is `your-dns-name.japaneast.cloudapp.azure.com`
+      2. If you are using Azure, the `domains` is `your-dns-name.japaneast.cloudapp.azure.com` (DNS name).
       3. Note that `domains` SHOULD BE AN ARRAY, that is you should keep the parenthesis there.
    2. `docker-compose.yml`
       1. No need to modify
@@ -60,9 +60,11 @@ Update from the original repo:
 4. Setup Nginx and HTTPS encryption stuff
     1. `chmod +x ./init-letsencrypt.sh`
     2. `./init-letsencrypt.sh`
+       * if you can't use this, might because docker need `sudo` permission
+       * must make sure the ports (firewall) are opened
 5. Start server
    1. `tmux`
-   2. `docker compose up`
+   2. `docker compose up` (permission issue just add `sudo` in the front)
 
 > You should be able to close your terminal now
 
