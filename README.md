@@ -4,6 +4,7 @@ Update from the original repo:
 
 1. Add additional notes for trouble shooting
 2. Update guidelines such as the latest usage of docker compose
+3. Add more helper script to speed up and simplify deployment
 
 ## Steps
 
@@ -28,15 +29,19 @@ Update from the original repo:
 
 > `ssh` into your machine
 
-1. Install `docker`
-   1. Download auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
-   2. Add user to docker user group (so you don't need `sudo` to use `docker`): `sudo gpasswd -a $USER docker`
-   3. Make docker auto start on boot: `sudo systemctl start docker` then `sudo systemctl enable docker`
-2. ~~Install `docker compose`~~ ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/)) (Currently docker compose is a built-in)
-   1. `DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}`
-   2. `mkdir -p $DOCKER_CONFIG/cli-plugins`
-   3. `curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose`
-   4. `chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose`
+1. Install docker with `install_docker.sh`
+
+> Legacy Steps
+>
+> 1. Install `docker`
+>    1. Download auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
+>    2. Add user to docker user group (so you don't need `sudo` to use `docker`): `sudo gpasswd -a $USER docker`
+>    3. Make docker auto start on boot: `sudo systemctl start docker` then `sudo systemctl enable docker`
+> 2. ~~Install `docker compose`~~ ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/)) (Currently docker compose is a built-in)
+>    1. `DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}`
+>    2. `mkdir -p $DOCKER_CONFIG/cli-plugins`
+>    3. `curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose`
+>    4. `chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose`
 
 ### 3. Clone Code and Config
 
@@ -45,28 +50,31 @@ Update from the original repo:
    2. `sudo apt install git vim tmux`
 2. `git clone https://github.com/daviddwlee84/DockerCompose-V2Ray.git` and `cd DockerCompose-V2Ray`
 3. Modify settings
-   1. `init-letsencrypt.sh`
-      1. Modify `domains` and `email` to be your own
-      2. If you are using Azure, the `domains` is `your-dns-name.japaneast.cloudapp.azure.com` (DNS name).
-      3. Note that `domains` SHOULD BE AN ARRAY, that is you should keep the parenthesis there.
+   1. Modify `your_domain` and `your_email_address` in `initial_https.sh` and execute
    2. `docker-compose.yml`
       1. No need to modify
    3. `data/v2ray/config.json`
       1. Change id to use your own `"id": "bae399d4-13a4-46a3-b144-4af2c0004c2e"` (or you can leave it as what it is)
       2. You can generate new UUID using this online tool: [Online UUID Generator Tool](https://www.uuidgenerator.net/)
-   4. `data/nginx/conf.d/v2ray.conf` (but currently it will be override by `init-letsencrypt.sh`?! whatever)
-      1. Modify all `your_domain`
-      2. You can use vim `:%s/your_domain/your-dns-name.japaneast.cloudapp.azure.com/g`
-4. Setup Nginx and HTTPS encryption stuff
-    1. `chmod +x ./init-letsencrypt.sh`
-    2. `./init-letsencrypt.sh`
-       * if you can't use this, might because docker need `sudo` permission
-       * must make sure the ports (firewall) are opened
-5. Start server
+4. Start server
    1. `tmux`
-   2. `docker compose up` (permission issue just add `sudo` in the front)
+   2. `docker compose up --build` (permission issue just add `sudo` in the front)
+   3. Exit you can use `Ctrl + b` then `d` to detach tmux and type `exit` to close the terminal
 
-> You should be able to close your terminal now
+> Legacy Steps
+>
+> 1. `init-letsencrypt.sh`
+>    1. Modify `domains` and `email` to be your own
+>    2. If you are using Azure, the `domains` is `your-dns-name.japaneast.cloudapp.azure.com` (DNS name).
+>    3. Note that `domains` SHOULD BE AN ARRAY, that is you should keep the parenthesis there.
+> 2. `data/nginx/conf.d/v2ray.conf`
+>    1. Modify all `your_domain`
+>    2. You can use vim `:%s/your_domain/your-dns-name.japaneast.cloudapp.azure.com/g`
+> 3. Setup Nginx and HTTPS encryption stuff
+>    1. `chmod +x ./init-letsencrypt.sh`
+>    2. `./init-letsencrypt.sh`
+>       * if you can't use this, might because docker need `sudo` permission
+>       * must make sure the ports (firewall) are opened
 
 ### 4. Config Your Client
 
