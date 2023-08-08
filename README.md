@@ -78,6 +78,10 @@ Update from the original repo:
 
 ### 4. Config Your Client
 
+#### 4-1. Shadowrocket
+
+Type: Vmess
+
 1. Address: `your-dns-name.japaneast.cloudapp.azure.com`
 2. Port: `443`
 3. UUID: `bae399d4-13a4-46a3-b144-4af2c0004c2e`
