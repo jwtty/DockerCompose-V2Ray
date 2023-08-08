@@ -34,8 +34,8 @@ Update from the original repo:
 > Legacy Steps
 >
 > 1. Install `docker`
->    1. Download auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
->    2. Add user to docker user group (so you don't need `sudo` to use `docker`): `sudo gpasswd -a $USER docker`
+>    1. Download the auto setup script and run: `curl -fsSL https://get.docker.com -o get-docker.sh` then `sh get-docker.sh`
+>    2. Add user to the docker user group (so you don't need `sudo` to use `docker`): `sudo gpasswd -a $USER docker`
 >    3. Make docker auto start on boot: `sudo systemctl start docker` then `sudo systemctl enable docker`
 > 2. ~~Install `docker compose`~~ ([Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/)) (Currently docker compose is a built-in)
 >    1. `DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}`
@@ -55,7 +55,7 @@ Update from the original repo:
       1. No need to modify
    3. `data/v2ray/config.json`
       1. Change id to use your own `"id": "bae399d4-13a4-46a3-b144-4af2c0004c2e"` (or you can leave it as what it is)
-      2. You can generate new UUID using this online tool: [Online UUID Generator Tool](https://www.uuidgenerator.net/)
+      2. You can generate a new UUID using this online tool: [Online UUID Generator Tool](https://www.uuidgenerator.net/) (not sure what is the difference between different version UUIDs, seems not all UUID-like strings will work)
 4. Start server
    1. `tmux`
    2. `docker compose up --build` (permission issue just add `sudo` in the front)
@@ -78,7 +78,7 @@ Update from the original repo:
 
 ### 4. Config Your Client
 
-#### 4-1. Shadowrocket
+#### 4-1. Shadowrocket (iOS client)
 
 Type: Vmess
 
@@ -93,9 +93,10 @@ Type: Vmess
 7. Transport: `websocket`
    1. Path: `/v2ray`
 
-#### 4-1. Clash
+#### 4-2. Clash (PC client)
 
 * Clash for Windows: [Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)
+  * It has "mac" version
 
 ```yaml
 # ...
@@ -128,4 +129,5 @@ Use `sudo tail -f ./path/to/log.log` to see the error message then debug
 2. If your Nginx server successfully running, you can connect to `https://your-dns-name.japaneast.cloudapp.azure.com` using a browser and see "Congratulation!" which basically is this HTML ([`data/nginx/html/v2ray/index.html`](data/nginx/html/v2ray/index.html))
 3. You can connect to `https://your-dns-name.japaneast.cloudapp.azure.com/v2ray`
    1. If you get a 502 error, that means your V2Ray server is not running correctly.
-   2. If you get the text "bad request", that means it successfully running.
+   2. If you get the text "bad request", that means it is successfully running.
+4. If you changed UUID and failed to connect but every other thing is fine (v2ray log can see traffic income), maybe change UUID back to the default value.
