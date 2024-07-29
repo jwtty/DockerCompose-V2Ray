@@ -93,10 +93,11 @@ Type: Vmess
 7. Transport: `websocket`
    1. Path: `/v2ray`
 
-#### 4-2. Clash (PC client)
+#### 4-2. Clash for Windows (PC client)
 
-* Clash for Windows: [Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)
-  * It has "mac" version
+> NOTE: different client might use different config format, even though it look similar at a glance (using yaml...)
+
+**Clash for Windows**: [Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)
 
 ```yaml
 # ...
@@ -118,6 +119,15 @@ proxies:
 
 # ...
 ```
+
+#### 4-3. Clash Core (CLI Client)
+
+- [Releases · Kuingsmile/clash-core](https://github.com/Kuingsmile/clash-core/releases)
+
+1. Simply download binary for your machine and run
+2. Modify `~/.config/clash/config.yaml` => can consume Clash for Windows config!
+3. Setup proxy `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
+4. (Optional) Make this a system service (`systemctl`)
 
 ## Trouble Shooting
 
