@@ -5,6 +5,7 @@ Update from the original repo:
 1. Add additional notes for trouble shooting
 2. Update guidelines such as the latest usage of docker compose
 3. Add more helper script to speed up and simplify deployment
+4. (new) Add a simpler config of just V2Ray + WS (without DNS settings i.e. connect with IP directly)
 
 ## Steps
 
@@ -126,7 +127,9 @@ Type: Vmess
 7. Transport: `websocket`
    1. Path: `/v2ray`
 
-> NOTE: the 6. TLS is needed if you follow `3-A`, if you use `3-B` you can skip it.
+> NOTE
+> 1. the `2. Port` should be `80` if you use `3-B`.
+> 2. the `6. TLS` is needed only if you follow `3-A`; if you use `3-B` you can skip it.
 
 #### 4-2. Clash for Windows (PC client)
 
@@ -137,6 +140,7 @@ Type: Vmess
 ```yaml
 # ...
 
+# 3-A.
 proxies:
   - name: "Your Customized Name"
     type: vmess
@@ -148,6 +152,26 @@ proxies:
     udp: false
     tls: true
     skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /v2ray
+
+# ...
+```
+
+```yaml
+# ...
+
+# 3-B.
+proxies:
+  - name: "Your Customized Name"
+    type: vmess
+    server: your-ip-address
+    port: 80
+    uuid: bae399d4-13a4-46a3-b144-4af2c0004c2e
+    alterId: 64
+    cipher: auto
+    udp: false
     network: ws
     ws-opts:
       path: /v2ray

@@ -10,4 +10,4 @@ sudo mv clash-linux-386-v1.18.0 /usr/local/bin/clash
 # ├── config.yaml
 # └── Country.mmdb
 
-export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+export http_proxy=http://127.0.0.1:7890 https_proxy=https://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891

@@ -14,7 +14,7 @@ mv Country.mmdb $target_dir/Country.mmdb
 # Seems config doesn't fit..
 cp ../example/clash_for_windows.yml config.yaml
 
-export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890
+export http_proxy=http://127.0.0.1:7890 https_proxy=https://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891
 
 # To cancel
 # unset http_proxy https_proxy all_proxy
