@@ -135,7 +135,12 @@ Type: Vmess
 
 > NOTE: different client might use different config format, even though it look similar at a glance (using yaml...)
 
-**Clash for Windows**: [Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)
+**Clash for Windows**:
+
+- [Clash for Windows Download – Clash for Windows](https://www.clashforwindows.net/clash-for-windows-download/)
+- [Releases · clashdownload/Clash_for_Windows](https://github.com/clashdownload/Clash_for_Windows/releases)
+- [Releases · lantongxue/clash_for_windows_pkg](https://github.com/lantongxue/clash_for_windows_pkg/releases)
+- ~~[Releases · Fndroid/clash_for_windows_pkg](https://github.com/Fndroid/clash_for_windows_pkg/releases)~~
 
 ```yaml
 # ...
