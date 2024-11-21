@@ -1,0 +1,6 @@
+services:
+  clash:
+    build: .
+    network_mode: host
+    volumes:
+      - ./config.yaml:/root/.config/clash/config.yaml

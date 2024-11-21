@@ -1,0 +1,111 @@
+port: 7890
+
+socks-port: 7891
+
+allow-lan: false
+
+external-controller: 127.0.0.1:9090
+
+mode: Rule
+
+proxies:
+  # 3-A.
+  - name: "Proxy 1"
+    type: vmess
+    server: your-dns-name.japaneast.cloudapp.azure.com
+    port: 443
+    uuid: bae399d4-13a4-46a3-b144-4af2c0004c2e
+    alterId: 64
+    cipher: auto
+    udp: false
+    tls: true
+    skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /v2ray
+
+  # 3-B.
+  - name: "Proxy 2"
+    type: vmess
+    server: your-ip-address
+    port: 80
+    uuid: bae399d4-13a4-46a3-b144-4af2c0004c2e
+    alterId: 64
+    cipher: auto
+    udp: false
+    network: ws
+    ws-opts:
+      path: /v2ray
+
+proxy-groups:
+  - name: "Auto Select"
+    type: url-test
+    proxies:
+      - "Proxy 1"
+      - "Proxy 2"
+    url: "http://www.gstatic.com/generate_204"
+    interval: 300
+
+  - name: "PROXY"
+    type: select
+    proxies:
+      - "Auto Select"
+      - "Proxy 1"
+      - "Proxy 2"
+
+  - name: "Final"
+    type: select
+    proxies:
+      - "DIRECT" # blacklist mode (always direct connect unless match PROXY rules)
+      - "PROXY" # whitelist mode (always use proxy unless match DIRECT rules)
+
+# Rules (unchanged unless sensitive information was present)
+rules:
+  # > Google
+  - DOMAIN-SUFFIX,googletraveladservices.com,DIRECT
+  - DOMAIN,dl.google.com,DIRECT
+  - DOMAIN,mtalk.google.com,DIRECT
+
+  # ...
+
+  # Local Area Network
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+
+  # DNSPod Public DNS+
+  - IP-CIDR,119.28.28.28/32,DIRECT,no-resolve
+  # GeoIP China
+  - GEOIP,CN,DIRECT
+
+  - MATCH,Final
+
+# Clash for Windows
+cfw-bypass:
+  - qq.com
+  - music.163.com
+  - "*.music.126.net"
+  - localhost
+  - 127.*
+  - 10.*
+  - 172.16.*
+  - 172.17.*
+  - 172.18.*
+  - 172.19.*
+  - 172.20.*
+  - 172.21.*
+  - 172.22.*
+  - 172.23.*
+  - 172.24.*
+  - 172.25.*
+  - 172.26.*
+  - 172.27.*
+  - 172.28.*
+  - 172.29.*
+  - 172.30.*
+  - 172.31.*
+  - 192.168.*
+  - <local>
+cfw-latency-timeout: 5000
