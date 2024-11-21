@@ -5,13 +5,15 @@ services:
     network_mode: host
     volumes:
       - ./config.yaml:/root/.config/clash/config.yaml
+      - ./ui_pages:/root/.config/clash/ui_pages
     restart: unless-stopped
 
-  dashboard:
-    image: haishanh/yacd
-    container_name: yacd
-    ports:
-      - "1234:80"  # Expose YACD on port 1234
-    depends_on:
-      - clash
-    restart: unless-stoppe
+  # NOTE: YACD image is not easy to pull without proxy...
+  # dashboard:
+  #   image: haishanh/yacd
+  #   container_name: yacd
+  #   ports:
+  #     - "1234:80"  # Expose YACD on port 1234
+  #   depends_on:
+  #     - clash
+  #   restart: unless-stoppe

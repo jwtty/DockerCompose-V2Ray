@@ -24,12 +24,22 @@ bind-address: "*"
 mode: rule
 
 # RESTful web API listening address
-external-controller: 127.0.0.1:9090
+# external-controller: 127.0.0.1:9090
+# To use UI you should expose this
+# http://localhost:9090/ui/
+external-controller: 0.0.0.0:9090
 
 # A relative path to the configuration directory or an absolute path to a
 # directory in which you put some static web resource. Clash core will then
 # serve it at `http://{{external-controller}}/ui`.
-# external-ui: folder
+external-ui: ui_pages
+
+# Secret for the RESTful API (optional)
+# Authenticate by spedifying HTTP header `Authorization: Bearer ${secret}`
+# ALWAYS set a secret if RESTful API is listening on 0.0.0.0
+# secret: "clash_secret"
+# If you set this you should add secret parameter
+# http://localhost:9090/ui/?secret=clash_secret
 
 proxies:
   # 3-A.

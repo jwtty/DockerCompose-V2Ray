@@ -69,6 +69,9 @@ sudo apt install w3m
 w3m google.com
 ```
 
+http://localhost:9090/ui/
+http://localhost:9090/ui/?secret=clash_secret
+
 ---
 
 ```bash
