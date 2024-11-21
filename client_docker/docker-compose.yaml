@@ -27,15 +27,15 @@ services:
   #     - clash
   #   restart: unless-stopped
 
-  dashboard:
-    build:
-      context: ./hinak0_yacd
-      args:
-        TARGETPLATFORM: linux/amd64
-        BUILDPLATFORM: linux/amd64
-    container_name: yacd
-    ports:
-      - "1234:80"  # Expose YACD on port 1234
-    depends_on:
-      - clash
-    restart: unless-stopped
+  # dashboard:
+  #   build:
+  #     context: ./hinak0_yacd
+  #     args:
+  #       TARGETPLATFORM: linux/amd64
+  #       BUILDPLATFORM: linux/amd64
+  #   container_name: yacd
+  #   ports:
+  #     - "1234:80"  # Expose YACD on port 1234
+  #   depends_on:
+  #     - clash
+  #   restart: unless-stopped
