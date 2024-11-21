@@ -46,10 +46,27 @@ docker info
 
 3. Start Clash
 
+NOTE: you should modify `config.yaml` with proper `proxies` settings
+
 ```bash
 docker compose up --build
 
 docker compose -f docker-compose-host-network.yaml up --build
+```
+
+```
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="Start initial compatible provider Auto Select"
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="Start initial compatible provider PROXY"
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="Start initial compatible provider Final"
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="inbound http://:7890 create success."
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="inbound socks://:7891 create success."
+clash-1  | time="2024-11-21T11:56:12Z" level=info msg="RESTful API listening at: 127.0.0.1:9090"
+```
+
+```bash
+# Test with Google
+sudo apt install w3m
+w3m google.com
 ```
 
 ---

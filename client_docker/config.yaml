@@ -79,8 +79,8 @@ proxy-groups:
   - name: "Final"
     type: select
     proxies:
-      - "DIRECT" # blacklist mode (always direct connect unless match PROXY rules)
       - "PROXY" # whitelist mode (always use proxy unless match DIRECT rules)
+      - "DIRECT" # blacklist mode (always direct connect unless match PROXY rules)
 
 # Rules (unchanged unless sensitive information was present)
 rules:
@@ -103,6 +103,7 @@ rules:
   # GeoIP China
   - GEOIP,CN,DIRECT
 
+  # Everything is not captured by rules goes here
   - MATCH,Final
 
 # Clash for Windows
