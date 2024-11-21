@@ -1,6 +1,7 @@
 services:
   clash:
     build: .
+    container_name: clash
     ports:
       # export http_proxy=http://127.0.0.1:7890 https_proxy=https://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7891
       - "7890:7890"  # HTTP Proxy Port
@@ -12,3 +13,13 @@ services:
       - "9090:9090"  # Dashboard or API Port
     volumes:
       - ./config.yaml:/root/.config/clash/config.yaml
+    restart: unless-stopped
+
+  dashboard:
+    image: haishanh/yacd
+    container_name: yacd
+    ports:
+      - "1234:80"  # Expose YACD on port 1234
+    depends_on:
+      - clash
+    restart: unless-stopped
