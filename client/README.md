@@ -42,6 +42,13 @@ TODO:
 - [haishanh/yacd: Yet Another Clash Dashboard](https://github.com/haishanh/yacd?tab=readme-ov-file)
 - [haishanh/yacd - Docker Image | Docker Hub](https://hub.docker.com/r/haishanh/yacd)
 
+## Todo
+
+Ubuntu
+
+- [ ] Make clash a system service (`systemctl`)
+- [ ] Update environment variable in shell configure
+
 ---
 
 ## Others

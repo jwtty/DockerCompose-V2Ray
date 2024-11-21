@@ -137,6 +137,8 @@ Type: Vmess
 
 **Clash for Windows**:
 
+> NOTE: Clash for Windows can be used in Windows, MacOS, and Ubuntu...
+
 - [Clash for Windows Download – Clash for Windows](https://www.clashforwindows.net/clash-for-windows-download/)
 - [Releases · clashdownload/Clash_for_Windows](https://github.com/clashdownload/Clash_for_Windows/releases)
 - [Releases · lantongxue/clash_for_windows_pkg](https://github.com/lantongxue/clash_for_windows_pkg/releases)
@@ -184,6 +186,8 @@ proxies:
 # ...
 ```
 
+[example yaml config](example/clash_for_windows.yml)
+
 #### 4-3. Clash Core (CLI Client)
 
 - [Releases · Kuingsmile/clash-core](https://github.com/Kuingsmile/clash-core/releases)
@@ -191,7 +195,59 @@ proxies:
 1. Simply download binary for your machine and run
 2. Modify `~/.config/clash/config.yaml` => can consume Clash for Windows config!
 3. Setup proxy `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
-4. (Optional) Make this a system service (`systemctl`)
+4. (Optional) Make this more "permanent":  [How to Configure Proxy Settings on Ubuntu](https://phoenixnap.com/kb/ubuntu-proxy-settings)
+   - make clash a system service (`systemctl`)
+   - put environment variable (3.) setting in your `~/.bashrc`
+
+Setting up Proxy for wget
+
+```ini
+# ~/.wgetrc
+use_proxy = on
+http_proxy = "http://[proxy_address]:[port_number]/"
+https_proxy = "https://[proxy_address]:[port_number]/"
+ftp_proxy = "ftp://[proxy_address]:[port_number]/"
+```
+
+Setting up Proxy for git
+
+```bash
+# 1. Use the following commands in the terminal to configure the proxy server:
+git config --global http.proxy http://[proxy_address]:[port_number]
+git config --global https.proxy https://[proxy_address]:[port_number]
+
+# 2. Check if the settings are applied:
+git config --global --get http.proxy
+git config --global --get https.proxy
+```
+
+Setting up Proxy for APT
+
+```conf
+# /etc/apt/apt.conf
+Acquire::http::Proxy "http://[proxy_address]:[port_number]/";
+Acquire::https::Proxy "https://[proxy_address]:[port_number]/";
+```
+
+How to Check Whether Ubuntu Proxy Works
+
+```bash
+# Environment variables
+echo $http_proxy
+echo $https_proxy
+
+# Connectivity
+curl -I http://example.com
+
+# Wget
+wget http://www.example.com
+
+# Git
+git ls-remote [remote_name_or_URL]
+
+# Apt
+sudo apt update
+```
 
 ## Trouble Shooting
 
