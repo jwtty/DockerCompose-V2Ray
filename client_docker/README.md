@@ -93,3 +93,27 @@ Usage of clash:
 
 - [What is Clash? | Clash Knowledge](https://en.clash.wiki/)
 - [快速入手 | Clash 知识库](https://clash.wiki/configuration/getting-started.html)
+
+---
+
+- [Downloading and installing Node.js and npm | npm Docs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [nvm-sh/nvm: Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
+- [How to install Node.js by NVM? Manage multiple versions of Node.js with nvm. | by Masud Afsar | Medium | Geek Culture](https://medium.com/geekculture/how-to-install-node-js-by-nvm-61addf4ab1ba)
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+```
+
+- [Installation | pnpm](https://pnpm.io/installation#on-posix-systems)
+
+```bash
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+cd hinak0_yacd
+pnpm i
+
+pnpm build
+# copy ./public to override ../ui_pages
+
+pnpm start
+```
