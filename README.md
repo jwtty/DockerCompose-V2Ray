@@ -194,7 +194,7 @@ proxies:
 
 1. Simply download binary for your machine and run
 2. Modify `~/.config/clash/config.yaml` => can consume Clash for Windows config!
-3. Setup proxy `export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
+3. Setup proxy `export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890`
 4. (Optional) Make this more "permanent":  [How to Configure Proxy Settings on Ubuntu](https://phoenixnap.com/kb/ubuntu-proxy-settings)
    - make clash a system service (`systemctl`)
    - put environment variable (3.) setting in your `~/.bashrc`

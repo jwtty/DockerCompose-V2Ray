@@ -117,3 +117,31 @@ pnpm build
 
 pnpm start
 ```
+
+---
+
+If curious about what's inside `Country.mmdb`
+
+`pip install -i https://pypi.tuna.tsinghua.edu.cn/simple geoip2`
+
+```python
+import geoip2.database
+
+reader = geoip2.database.Reader('Country.mmdb')
+
+# Note: This is just an example and not efficient for large datasets
+ip_addresses = ['8.8.8.8', '1.1.1.1', '203.0.113.0']
+
+for ip in ip_addresses:
+    try:
+        response = reader.country(ip)
+        print(f"IP: {ip}, Country: {response.country.iso_code}, Name: {response.country.name}")
+    except geoip2.errors.AddressNotFoundError:
+        print(f"IP: {ip} not found in the database.")
+```
+
+```
+IP: 8.8.8.8, Country: US, Name: United States
+IP: 1.1.1.1, Country: None, Name: None
+IP: 203.0.113.0 not found in the database.
+```
