@@ -1,0 +1,15 @@
+services:
+  v2ray:
+    image: v2ray/official:latest
+    container_name: v2ray
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    command: v2ray -config=/etc/v2ray/config.json
+    volumes:
+      - ./data/v2ray:/etc/v2ray
+      - ./logs/v2ray:/var/log/v2ray
+    expose:
+      - "30909" # This is for the nginx docker, you don't need to expose it to the public
+    ports:
+      - 80:30909
